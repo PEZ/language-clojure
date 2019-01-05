@@ -278,6 +278,14 @@ describe "Clojure grammar", ->
     expect(tokens[5]).toEqual value: "}", scopes: ["source.clojure", "meta.expression.clojure", "meta.set.clojure", "punctuation.section.set.end.trailing.clojure"]
     expect(tokens[6]).toEqual value: ")", scopes: ["source.clojure", "meta.expression.clojure", "punctuation.section.expression.end.trailing.clojure"]
 
+  it "tokenize strings (wrongly) used as functions", ->
+    {tokens} = grammar.tokenizeLine "(\"foo)\")"
+    expect(tokens[0]).toEqual value: "(", scopes: ["source.clojure", "meta.expression.clojure", "punctuation.section.expression.begin.clojure"]
+    expect(tokens[1]).toEqual value: "\"", scopes: ["source.clojure", "meta.expression.clojure", "string.quoted.double.clojure", "punctuation.definition.string.begin.clojure"]
+    expect(tokens[2]).toEqual value: "foo)", scopes: ["source.clojure", "meta.expression.clojure", "string.quoted.double.clojure"]
+    expect(tokens[3]).toEqual value: "\"", scopes: ["source.clojure", "meta.expression.clojure", "string.quoted.double.clojure", "punctuation.definition.string.end.clojure"]
+    expect(tokens[4]).toEqual value: ")", scopes: ["source.clojure", "meta.expression.clojure", "punctuation.section.expression.end.trailing.clojure"]
+
   describe "firstLineMatch", ->
     it "recognises interpreter directives", ->
       valid = """
